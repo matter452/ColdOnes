@@ -63,7 +63,7 @@ public class UIManager : MonoBehaviour
             case e_UiDocuments.PauseMenuUI:
                 pauseMenu = new PauseMenuUI();
                 break;
-            case e_UuDocuments.GameUI:
+            case e_UiDocuments.GameUI:
                 gameplayUI = new GameUI();
                 break;
             case e_UiDocuments.ScoreUI:
