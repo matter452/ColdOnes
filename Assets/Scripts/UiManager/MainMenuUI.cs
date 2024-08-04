@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class GameUI : MonoBehaviour
+public class MainMenuUI : MonoBehaviour
 {
     
 }
