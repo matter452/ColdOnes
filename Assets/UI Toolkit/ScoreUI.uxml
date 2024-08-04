@@ -1,0 +1,13 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:Template name="myNotBadButton" src="project://database/Assets/UI%20Toolkit/Templates/myNotBadButton.uxml?fileID=9197481963319205126&amp;guid=5da391989dca76d46944c872b15ff6bf&amp;type=3#myNotBadButton" />
+    <Style src="project://database/Assets/UI%20Toolkit/ScoreUI.uss?fileID=7433441132597879392&amp;guid=2151083a41b16e94b8e68e407d97dae2&amp;type=3#ScoreUI" />
+    <ui:VisualElement class="card-container" style="-unity-font: url(&quot;project://database/Assets/TextMesh%20Pro/Fonts/Karu-Bold.otf?fileID=12800000&amp;guid=0ee7a6ea27272604bac3030f66f6bced&amp;type=3#Karu-Bold&quot;); -unity-font-definition: initial; font-size: 107px; align-self: center; width: 83%; height: 70%; justify-content: center; top: 14%; background-color: rgba(72, 22, 219, 0.83); border-top-left-radius: 30px; border-top-right-radius: 30px; border-bottom-right-radius: 30px; border-bottom-left-radius: 30px; color: rgb(217, 217, 217); padding-left: 37px; padding-right: 25px; border-bottom-color: rgba(17, 8, 34, 0.11); border-bottom-width: 13px; border-right-color: rgba(17, 8, 34, 0.11); border-right-width: 13px;">
+        <ui:VisualElement class="cold-ones-container" style="flex-direction: row; padding-left: 14px; padding-right: 14px;">
+            <ui:Label text="Cold Ones: #" name="coldOnesScore" class="cold-ones-label" style="text-shadow: 5.6px 2.3px 5.4px rgba(23, 19, 34, 0.51); -unity-text-outline-color: rgba(0, 0, 0, 0); -unity-text-outline-width: 0;" />
+        </ui:VisualElement>
+        <ui:VisualElement class="warm-ones-container" style="flex-direction: row; padding-right: 14px; padding-left: 14px;">
+            <ui:Label text="Warm Ones: #" name="warmOnesScore" class="warm-ones-label" style="text-shadow: 5.4px 2px 5.4px rgba(23, 19, 34, 0.51);" />
+        </ui:VisualElement>
+        <ui:Instance template="myNotBadButton" name="myNotBadButton" />
+    </ui:VisualElement>
+</ui:UXML>

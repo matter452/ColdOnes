@@ -1,0 +1,60 @@
+.card-container {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    background-color: rgb(46, 46, 46);
+    border-radius: 10px;
+    margin: 10px;
+}
+
+.score-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.cold-ones-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.warm-ones-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.total-score-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.score-label {
+    font-size: 98px;
+    color: rgb(255, 255, 255);
+}
+
+.cold-ones-label {
+    font-size: 98px;
+    color: rgb(255, 255, 255);
+}
+
+.warm-ones-label {
+    font-size: 98px;
+    color: rgb(255, 255, 255);
+}
+
+.total-score-label {
+    font-size: 98px;
+    color: rgb(255, 255, 255);
+}
+
+.upgrades-button {
+    margin-left: 10px;
+}

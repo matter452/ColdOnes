@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement class="total-score-container" style="flex-direction: row; justify-content: space-between; margin-right: 14px; margin-left: 14px; margin-top: 153px; align-items: center;">
+        <ui:Label text="Total Score: #" name="totalScore" class="total-score-label" style="text-shadow: 5.4px 2px 5.4px rgba(23, 19, 34, 0.51);" />
+        <ui:Button text="Upgrades" name="scoreButton" class="upgrades-button" style="background-color: rgba(49, 39, 240, 0.88); -unity-text-outline-color: rgba(196, 196, 196, 0); color: rgb(217, 217, 217); font-size: 54px; padding-top: 23px; padding-right: 23px; padding-bottom: 23px; padding-left: 23px; border-top-left-radius: 17px; border-top-right-radius: 17px; border-bottom-right-radius: 17px; border-bottom-left-radius: 17px; border-left-color: rgba(33, 22, 176, 0.77); border-right-color: rgba(33, 22, 176, 0.77); border-top-color: rgba(101, 92, 215, 0.77); border-bottom-color: rgba(22, 15, 119, 0.77); border-top-width: 9px; border-right-width: 9px; border-bottom-width: 9px; border-left-width: 9px;" />
+    </ui:VisualElement>
+</ui:UXML>

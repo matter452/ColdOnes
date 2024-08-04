@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ChunkSpawner : MonoBehaviour
 {   
-    [SerializeField] private Chunk ChunkTile;
-    [SerializeField] private int numberOfInitialChunks;
+    [SerializeField] private Chunk _chunkTile;
+    [SerializeField] private int _numberOfInitialChunks;
     Transform nextChunkSpawn;
     private LinkedList<Chunk> _activeChunks = new LinkedList<Chunk>();
     private LinkedList<Chunk> _inactiveChunks = new LinkedList<Chunk>();
@@ -28,18 +28,18 @@ public class ChunkSpawner : MonoBehaviour
     }
     public void InitializeFirstChunks()
     {   
-        Chunk initialChunk = Instantiate(ChunkTile, transform);
+        Chunk initialChunk = Instantiate(_chunkTile, transform);
         _SetNextChunkSpawn(initialChunk);
         ActiveChunksSetLast(initialChunk);
 
-        for(int i = 0; i < numberOfInitialChunks; i++){
+        for(int i = 0; i < _numberOfInitialChunks; i++){
             Chunk newChunk = SpawnChunk();
             ActiveChunksSetLast(newChunk);
         }
     }
     public Chunk SpawnChunk()
     {   
-        Chunk spawnedChunk = Instantiate(ChunkTile, nextChunkSpawn);
+        Chunk spawnedChunk = Instantiate(_chunkTile, nextChunkSpawn);
         _SetNextChunkSpawn(spawnedChunk);
         return spawnedChunk;
     }
