@@ -1,54 +1,58 @@
 using UnityEngine;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class GameManager : MonoBehaviour
 {   
-    private static GameManager _instance;
-    // Singleton instance
-    public static GameManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                // Find the existing instance in the scene
-                _instance = FindObjectOfType<GameManager>();
-
-                // If no instance is found, create a new one
-                if (_instance == null)
-                {
-                    GameObject singletonObject = new GameObject("GameManager");
-                    _instance = singletonObject.AddComponent<GameManager>();
-
-                    // Optionally make it persist between scenes
-                    DontDestroyOnLoad(singletonObject);
-                }
-            }
-            return _instance;
-        }
-    }
-
-    // Player reference
-    private GameObject player;
+    [SerializeField] private PlayerManager _playerManager;
+    [SerializeField] private LevelManager _levelManager;
+    private UIManager _uiManager;
+    private GameObject _player;
     private Transform _playerSpawnPosition;
     public PlayerInput input;
     private Vector3 lastPlayerPosition;
-        
+    private ScoreManager _scoreManager;
+    public GameObject MainCamera;
+    private static GameManager _instance;
+    // Singleton instance
+    public static GameManager Instance{
+        get{ return _instance; }
+    }
      private void Awake()
     {
         if (_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject); // Optionally make it persist between scenes
+            DontDestroyOnLoad(gameObject);
         }
         else if (_instance != this)
         {
-            Destroy(gameObject); // Destroy duplicate instances
+            Destroy(gameObject); 
         }
+        _playerManager = Instantiate(_playerManager, transform);
+        _levelManager = Instantiate(_levelManager, transform);
+        _uiManager = UIManager.Instance;
     }
     
-    public void StartLevel()
+    
+    /* {
+        get
+        {
+                if (_instance == null)
+                {
+                    GameObject singletonObject = new GameObject("GameManager");
+                    _instance = singletonObject.AddComponent<GameManager>();
+                    
+                }
+            return _instance;
+        }
+    } */
+
+    public void StartGame()
     {
-        
+        _levelManager.StartLevel();
+        _playerManager.SpawnPlayer(Instance.transform);
+        _scoreManager = new ScoreManager();
+        _uiManager.DisplayUI(UIManager.e_UiDocuments.LevelStartUI);
     }
 
     public Transform GetInitialSpawn()
@@ -61,6 +65,11 @@ public class GameManager : MonoBehaviour
         return input;
     }
 
+    public void OffMainCamera()
+    {
+        MainCamera.SetActive(false);
+    }
+
     // Save the player's last known position
     public void SavePlayerPosition(Vector3 position)
     {
@@ -70,9 +79,9 @@ public class GameManager : MonoBehaviour
     // Respawn the player to the last saved position
     public void RespawnPlayer()
     {
-        if (player != null)
+        if (_player != null)
         {
-            player.transform.position = lastPlayerPosition;
+            _player.transform.position = lastPlayerPosition;
         }
     }
 
@@ -82,4 +91,20 @@ public class GameManager : MonoBehaviour
         RespawnPlayer(); // Respawn player to last position
         // Additional logic such as decrementing lives or showing a message can be added here
     }
+
+    public static LevelManager GetLevelManager()
+    {
+        return _instance._levelManager;
+    }
+
+    public static PlayerManager GetPlayerManager()
+    {
+        return _instance._playerManager;
+    }
+
+    public static UIManager GetUIManager()
+    {
+        return _instance._uiManager;
+    }
+    public static ScoreManager ScoreManager { get => _instance._scoreManager; set => _instance._scoreManager = value; }
 }

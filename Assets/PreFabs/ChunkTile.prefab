@@ -1,5 +1,58 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &10456464475504754
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8825274955625666173}
+  - component: {fileID: 8916241005118072783}
+  m_Layer: 3
+  m_Name: NextChunkSpawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8825274955625666173
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10456464475504754}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 200}
+  m_LocalScale: {x: 13, y: 1, z: 20}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7706272065060254549}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &8916241005118072783
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 10456464475504754}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 10, y: 19.14, z: 1}
+  m_Center: {x: 0, y: 0, z: -8.34}
 --- !u!1 &1350826859409162226
 GameObject:
   m_ObjectHideFlags: 0
@@ -28,9 +81,9 @@ Transform:
   m_GameObject: {fileID: 1350826859409162226}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 13, y: 1, z: 20}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7706272065060254549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -115,8 +168,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3176363178408204036}
-  m_Layer: 0
-  m_Name: NextChunkSpawn
+  m_Layer: 3
+  m_Name: NextChunkSpawnObsolete
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,8 +184,8 @@ Transform:
   m_GameObject: {fileID: 2413166803561740535}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 105.5}
+  m_LocalScale: {x: 13.15, y: 1, z: 9.74}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7706272065060254549}
@@ -146,8 +199,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7706272065060254549}
+  - component: {fileID: 3766560999671552488}
+  - component: {fileID: -7230119607937074839}
   - component: {fileID: 159661041788437760}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: ChunkTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,8 +224,50 @@ Transform:
   m_Children:
   - {fileID: 6901449968210609304}
   - {fileID: 3176363178408204036}
+  - {fileID: 8825274955625666173}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3766560999671552488
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7146297235072462452}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 133.36, y: 20.53, z: 11.57}
+  m_Center: {x: 0, y: 0.5, z: 25.43}
+--- !u!154 &-7230119607937074839
+TerrainCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7146297235072462452}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_TerrainData: {fileID: 0}
+  m_EnableTreeColliders: 1
 --- !u!114 &159661041788437760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,4 +280,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bf5e7c3e4035fa45a7cbe27a2c60c19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _nextChunkSpawn: {fileID: 3176363178408204036}
+  _nextChunkSpawn: {fileID: 8825274955625666173}

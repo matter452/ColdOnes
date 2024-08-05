@@ -26,10 +26,14 @@ public class UIManager : MonoBehaviour
     public e_UiDocuments ActiveUI {get; private set; }
     private MainMenuUI startMenu;
     private PauseMenuUI pauseMenu;
-    private GameUI gameplayUI;
+    private GameplayUI gameplayUI;
     private ScoreUI scoreUI;
     private UpgradesUI upgradeUI;
     private LevelStartUI levelStartUI;
+    private static UIManager _instance;
+    public static UIManager Instance{
+        get{ return _instance;}
+    }
 
     [SerializeField] private List<UiDocuments> ListOfUIs = new List<UiDocuments>();
 
@@ -37,8 +41,9 @@ public class UIManager : MonoBehaviour
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     void Awake()
-    {
+    {   _instance = this;
         uiDocComponent = gameObject.GetComponent<UIDocument>();
+        
     }
 
     /// <summary>
@@ -47,35 +52,44 @@ public class UIManager : MonoBehaviour
     /// </summary>
     void Start()
     {
-        
+        DisplayUI(e_UiDocuments.MainMenuUI);
     }
 
-    void DisplayUI(e_UiDocuments document)
+    public void DisplayUI(e_UiDocuments document)
     {
         ActiveUI = document;
-        uiDocComponent.visualTreeAsset = ListOfUIs[(int)ActiveUI].UXMLDocument;
+        VisualTreeAsset activeUI = ListOfUIs[(int)ActiveUI].UXMLDocument;
+        uiDocComponent.visualTreeAsset = activeUI;
+        VisualElement activeUIRoot = uiDocComponent.rootVisualElement;
         
          switch (ActiveUI)
         {
             case e_UiDocuments.MainMenuUI:
-                startMenu = new MainMenuUI();
+                startMenu = gameObject.AddComponent<MainMenuUI>();
+                startMenu.SetRootElement(this, activeUIRoot);
                 break;
             case e_UiDocuments.PauseMenuUI:
-                pauseMenu = new PauseMenuUI();
+                pauseMenu = gameObject.AddComponent<PauseMenuUI>();
+                pauseMenu.SetRootElement(this, activeUIRoot);
                 break;
             case e_UiDocuments.GameUI:
-                gameplayUI = new GameUI();
+                gameplayUI = gameObject.AddComponent<GameplayUI>();
+                gameplayUI.SetRootElement(this, activeUIRoot);
                 break;
             case e_UiDocuments.ScoreUI:
-                scoreUI = new ScoreUI();
+                scoreUI = gameObject.AddComponent<ScoreUI>();
+                scoreUI.SetRootElement(this, activeUIRoot);
                 break;
             case e_UiDocuments.UpgradesUI:
-                upgradeUI = new UpgradesUI();
+                upgradeUI = gameObject.AddComponent<UpgradesUI>();
+                upgradeUI.SetRootElement(this, activeUIRoot);
                 break;
             case e_UiDocuments.LevelStartUI:
-                levelStartUI = new LevelStartUI();
+                levelStartUI = gameObject.AddComponent<LevelStartUI>();
+                levelStartUI.SetRootElement(this, activeUIRoot);
                 break;
         }
     }
+
 }
    

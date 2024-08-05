@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 7880327390712985690}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -69.51328, y: -87.04352, z: 70.201164}
+  m_LocalPosition: {x: 0, y: 0, z: 70}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,5 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053be673bf5dce44ba386509388a4838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChunkTile: {fileID: 159661041788437760, guid: 73029cd83a9b6c048a63e8fb8e172e5e, type: 3}
-  numberOfInitialChunks: 3
+  _chunkTile: {fileID: 159661041788437760, guid: 73029cd83a9b6c048a63e8fb8e172e5e, type: 3}
+  _endChunk: {fileID: 2628441838531251900, guid: d08d1d93a3c3fc6438be3612457a11c9, type: 3}
+  _numberOfInitialChunks: 1
+  _initialChunkPositionAdjust: 0

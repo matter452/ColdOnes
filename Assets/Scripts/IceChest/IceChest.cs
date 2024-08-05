@@ -153,6 +153,16 @@ public class IceChest : MonoBehaviour
         return _movementPenalty;
     }
 
+    public int GetWarmOnes()
+    {
+        return Mathf.RoundToInt(_warmBeers);
+    }
+
+    public int GetColdOnes()
+    {
+        return Mathf.RoundToInt(_cooledBeers);
+    }
+
     /* void Update()
     {
         // Example input handling for upgrades (for demonstration purposes)

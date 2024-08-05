@@ -5,7 +5,7 @@ using UnityEditor.Build.Content;
 
 public class PlayerController : MonoBehaviour
 {   
-    public float baseSpeed = 5f;
+    public float baseSpeed = 15f;
     public float appliedMoveSpeed;
     public float jumpForce = 7f;
     public float rotationSpeed = 720f;
@@ -24,8 +24,10 @@ public class PlayerController : MonoBehaviour
     private Rigidbody _grabbedObjectRb = null;
     private FixedJoint _grabJoint = null;
     public Transform carryPosition; // Position where the player carries the object
+    public Transform cameraStart;
     public LayerMask pickupLayer; // Layer mask for pickable objects
     private GameObject _carriedObject = null;
+    public int characterShimmy;
 
 
     private CharacterController _characterController;
@@ -35,7 +37,8 @@ public class PlayerController : MonoBehaviour
     private GameManager _gameController;
     private float _movementSpeedDebuff;
     [SerializeField]private Transform _iceChestSpawn;
-    [SerializeField]private IceChest _playerIceChest;
+    [SerializeField]private IceChest _IceChestPrefab;
+    private IceChest _iceChest;
 
 
     void Start()
@@ -46,10 +49,12 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _gameController = GameManager.Instance;
         _movementSpeedDebuff = 0;
-        Instantiate(_playerIceChest, _iceChestSpawn);
+        _iceChest = Instantiate(_IceChestPrefab);
+        _iceChest.transform.position = _iceChestSpawn.transform.position;
 
         // Ensure the character starts at ground level
         SetCharacterAtGroundLevel();
+        
     }
 
     void Update()
@@ -104,8 +109,8 @@ public class PlayerController : MonoBehaviour
 
             // Calculate move direction relative to camera
             Vector3 desiredMoveDirection = forward * direction.z + right * direction.x;
-            _moveDirection.x = desiredMoveDirection.x * baseSpeed;
-            _moveDirection.z = desiredMoveDirection.z * baseSpeed;
+            _moveDirection.x = desiredMoveDirection.x * appliedMoveSpeed;
+            _moveDirection.z = desiredMoveDirection.z * appliedMoveSpeed;
 
             // Calculate the target rotation
             Quaternion targetRotation = Quaternion.LookRotation(desiredMoveDirection);
@@ -255,7 +260,7 @@ public class PlayerController : MonoBehaviour
         {
             // Adjust the character's position to be at the ground level
             Vector3 adjustedPosition = hit.point;
-            adjustedPosition.y += _characterController.height / 2;
+            adjustedPosition.y += (_characterController.height / 2)+characterShimmy;
             transform.position = adjustedPosition;
 
             // Log the new position
@@ -269,11 +274,16 @@ public class PlayerController : MonoBehaviour
 
     public void SetMovementPenalty()
     {
-        _movementSpeedDebuff = _playerIceChest.GetMovementPenalty();
+        _movementSpeedDebuff = _iceChest.GetMovementPenalty();
     }
 
-    void ApplyMovementSpeedDebuff()
+    public void ApplyMovementSpeedDebuff()
     {
-        appliedMoveSpeed = baseSpeed * _movementSpeedDebuff;
+        appliedMoveSpeed = baseSpeed * (1-_movementSpeedDebuff);
+    }
+
+    public IceChest GetPlayerIceChest()
+    {
+        return _iceChest;
     }
 }

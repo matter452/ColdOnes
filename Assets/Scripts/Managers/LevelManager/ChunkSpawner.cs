@@ -5,20 +5,24 @@ using UnityEngine;
 public class ChunkSpawner : MonoBehaviour
 {   
     [SerializeField] private Chunk _chunkTile;
+    [SerializeField] private Chunk _endChunk;
     [SerializeField] private int _numberOfInitialChunks;
+    [SerializeField] private float _initialChunkPositionAdjust = 0f;
     Transform nextChunkSpawn;
+    private int _levelTotalChunksToSpawn;
+    private int _chunksSpawned;
     private LinkedList<Chunk> _activeChunks = new LinkedList<Chunk>();
     private LinkedList<Chunk> _inactiveChunks = new LinkedList<Chunk>();
 
     void Awake()
     {
-        InitializeFirstChunks();
+        
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        SpawnChunk();
+
     }
 
     // Update is called once per frame
@@ -28,18 +32,30 @@ public class ChunkSpawner : MonoBehaviour
     }
     public void InitializeFirstChunks()
     {   
-        Chunk initialChunk = Instantiate(_chunkTile, transform);
+        Chunk initialChunk = Instantiate(_chunkTile);
+        initialChunk.transform.position = gameObject.transform.position;
+        _chunksSpawned++;
+        initialChunk.transform.position += new Vector3(0,0,_initialChunkPositionAdjust);
         _SetNextChunkSpawn(initialChunk);
         ActiveChunksSetLast(initialChunk);
 
-        for(int i = 0; i < _numberOfInitialChunks; i++){
+        for(int i = 1; _chunksSpawned < _numberOfInitialChunks; i++){
             Chunk newChunk = SpawnChunk();
+            _chunksSpawned++;
             ActiveChunksSetLast(newChunk);
         }
     }
     public Chunk SpawnChunk()
     {   
-        Chunk spawnedChunk = Instantiate(_chunkTile, nextChunkSpawn);
+        Chunk spawnedChunk = Instantiate(_chunkTile);
+        spawnedChunk.transform.position = nextChunkSpawn.position;
+        _SetNextChunkSpawn(spawnedChunk);
+        return spawnedChunk;
+    }
+    public Chunk SpawnChunk(Chunk specialChunk)
+    {
+        Chunk spawnedChunk = Instantiate(specialChunk);
+        spawnedChunk.transform.position = nextChunkSpawn.position;
         _SetNextChunkSpawn(spawnedChunk);
         return spawnedChunk;
     }
@@ -47,8 +63,21 @@ public class ChunkSpawner : MonoBehaviour
     {
         nextChunkSpawn = chunk.GetNextChunkSpawn();
     }
-    public void TriggerNextChunkOperations()
-    {   Chunk nextChunk = SpawnChunk();
+    public void OnTriggerNextChunkOperations()
+    {   Chunk nextChunk;
+        if(_chunksSpawned + 1 == _levelTotalChunksToSpawn)
+        {
+            nextChunk = SpawnChunk(_endChunk);
+            _chunksSpawned++;
+        }
+        else if(_chunksSpawned == _levelTotalChunksToSpawn)
+        {
+            return;
+        }
+        else{
+            nextChunk = SpawnChunk();
+            _chunksSpawned++;
+        }
         ActiveChunksSetLast(nextChunk);
 
         if(_activeChunks.Count > 4){
@@ -66,7 +95,7 @@ public class ChunkSpawner : MonoBehaviour
     }
     //Add a despawend chunk to the inactive list's end
     private void _InactiveChunksSetLast(Chunk deactivatedChunk)
-    {
+    {   deactivatedChunk.enabled = false;
         _inactiveChunks.AddLast(deactivatedChunk);
     }
     //get the oldest Active chunk (behind the player)
@@ -82,5 +111,10 @@ public class ChunkSpawner : MonoBehaviour
     private void _ActiveChunksRemoveFirst()
     {
         _activeChunks.RemoveFirst();
+    }
+
+    public void SetLevelTotalChunksToSpawn(int amount)
+    {
+        _levelTotalChunksToSpawn = amount;
     }
 }
