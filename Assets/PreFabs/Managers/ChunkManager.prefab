@@ -44,7 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 053be673bf5dce44ba386509388a4838, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _chunkTile: {fileID: 159661041788437760, guid: 73029cd83a9b6c048a63e8fb8e172e5e, type: 3}
-  _endChunk: {fileID: 2628441838531251900, guid: d08d1d93a3c3fc6438be3612457a11c9, type: 3}
+  _chunkTile: {fileID: 6821373955135735203, guid: 73029cd83a9b6c048a63e8fb8e172e5e, type: 3}
+  _endChunk: {fileID: 8712002693458906655, guid: d08d1d93a3c3fc6438be3612457a11c9, type: 3}
   _numberOfInitialChunks: 1
   _initialChunkPositionAdjust: 0
+  _gridManager: {fileID: 544962893308521525, guid: 5e9e302a9212b054c8bc40da31099185, type: 3}

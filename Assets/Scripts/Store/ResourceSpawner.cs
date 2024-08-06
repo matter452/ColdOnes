@@ -1,27 +1,42 @@
 using UnityEngine;
 
-abstract class Resource : MonoBehaviour
-{   
-    public Resources Type { get; private set; }
-    public int Quantity { get; private set; }
-    public AudioClip ResourceSound { get; private set; }
-    public Resource (Resources type, int quantity)
+public class ResourceSpawner : MonoBehaviour
+{
+    public Resource resourcePrefab;  // dont forget to assign mang
+    public int minQuantity = 1;
+    public int maxQuantity = 5;
+    public float[] spawnProbabilities = { 0.5f, 0.3f, 0.1f, 0.05f, 0.05f };
+    public Transform Spawn;
+
+    void Start()
     {
-        Type = type;
-        Quantity = quantity;
+        Spawn = gameObject.transform.GetChild(0).transform;
+        SpawnResources();
     }
 
-    public void PlayResourceSound()
+    public void SpawnResources()
     {
-        
+        int quantity = GetRandomQuantity(minQuantity, maxQuantity, spawnProbabilities);
+        for (int i = 0; i < quantity; i++)
+        {
+            Instantiate(resourcePrefab, Spawn.position, Quaternion.identity);
+        }
     }
 
-    public void DestroyResource()
+    private int GetRandomQuantity(int min, int max, float[] probabilities)
     {
-        Destroy(this);
+        float rand = Random.value;
+        float cumulativeProbability = 0f;
+
+        for (int i = min; i <= max; i++)
+        {
+            cumulativeProbability += probabilities[i - min];
+            if (rand < cumulativeProbability)
+            {
+                return i;
+            }
+        }
+
+        return min;
     }
-
-    abstract public void UseResource();
-
-
 }

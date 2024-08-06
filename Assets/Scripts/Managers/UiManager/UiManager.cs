@@ -55,6 +55,11 @@ public class UIManager : MonoBehaviour
         DisplayUI(e_UiDocuments.MainMenuUI);
     }
 
+    void Update()
+    {
+        
+    }
+
     public void DisplayUI(e_UiDocuments document)
     {
         ActiveUI = document;

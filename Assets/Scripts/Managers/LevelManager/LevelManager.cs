@@ -13,24 +13,19 @@ public class LevelManager : MonoBehaviour
     private ChunkSpawner _chunkSpawner;
     
 
-    /// <summary>
-    /// Start is called on the frame when a script is enabled just before
-    /// any of the Update methods is called the first time.
-    /// </summary>
     void Start()
-    {
+    {   InitLevelConfig();
         _chunkSpawner = GetComponentInChildren<ChunkSpawner>();
-        InitLevelConfig();
-        _scoringManager = GameManager.ScoreManager;
+        _scoringManager = GameManager.GetScoreManager();
     }
 
     public void InitLevelConfig()
     {
-        CurrentLevel = 1;
+        CurrentLevel = 0;
         levelPassed = false;
     }
     public void StartLevel()
-    {
+    {   CurrentLevel++;
         _chunkSpawner.SetLevelTotalChunksToSpawn(levelLength);
         _chunkSpawner.InitializeFirstChunks();
     }
@@ -49,9 +44,16 @@ public class LevelManager : MonoBehaviour
     {
         if(_scoringManager.ScoreMet())
         {
-           UIManager.Instance.DisplayUI(UIManager.e_UiDocuments.UpgradesUI); 
+            UIManager.Instance.DisplayUI(UIManager.e_UiDocuments.UpgradesUI);
+            IncreaseLevelLength(1);
+            _scoringManager.CurrentLevel++;
+            _chunkSpawner.ResetChunkCount();
+            _chunkSpawner.SetLevelTotalChunksToSpawn(levelLength);
+            StartLevel();
+            
         }
         else{
+            CurrentLevel = 0;
             UIManager.Instance.DisplayUI(UIManager.e_UiDocuments.LevelStartUI);
         }
     }

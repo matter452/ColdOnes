@@ -12,11 +12,15 @@ public class ScoreUI : MonoBehaviour
     private Label _totalScore;
     private Button _myNotBadButton;
     private LevelManager _levelManager;
+    private ScoreManager _scoreManager;
+    private IceChest _iceChest;
 
     void Start()
     {
-        InitElements();
+        _scoreManager = GameManager.GetScoreManager();
         _levelManager = GameManager.GetLevelManager();
+        _iceChest = GameManager.GetPlayerManager().GetPlayer().GetPlayerIceChest();
+        InitElements();
     }
 
     public void SetRootElement(UIManager uIManager,VisualElement activeUIRoot)
@@ -31,6 +35,11 @@ public class ScoreUI : MonoBehaviour
         _totalScore = _root.Q<Label>("totalScore");
         _myNotBadButton = _root.Q<Button>("scoreButton");
         _myNotBadButton.clicked += buttonClicked;
+
+        _coldOnes.text = "Cold Ones: "+_iceChest.GetColdOnes().ToString();
+        _warmOnes.text = "Warm Ones: "+_iceChest.GetWarmOnes().ToString();
+        _totalScore.text = "Total Score: "+_scoreManager.CurrentScore.ToString();
+
     }
 
     private void buttonClicked()

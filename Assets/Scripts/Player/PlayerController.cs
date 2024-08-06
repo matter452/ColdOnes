@@ -2,15 +2,15 @@ using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEditor.Build.Content;
+using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {   
-    public float baseSpeed = 15f;
+    public float baseSpeed = 30f;
     public float appliedMoveSpeed;
-    public float jumpForce = 7f;
+    public float jumpForce = 9f;
     public float rotationSpeed = 720f;
     public Transform cameraTransform; // Reference to the main camera transform
-    public Transform handTransform; // Reference to the hand or point where objects will be held
     public LayerMask groundLayer; // Layer mask to identify ground
     public float grabRange = 2f; // Range within which the player can grab objects
     public bool isInteracting = false;
@@ -18,16 +18,15 @@ public class PlayerController : MonoBehaviour
 
     private Vector3 _moveDirection = Vector3.zero;
     private float _gravity = -9.81f; // Gravity constant
-    public float gravityMultiplier = 2f;
+    public float gravityMultiplier = 3f;
     private bool _isGrounded;
-    private bool _isGrabbing = false;
-    private Rigidbody _grabbedObjectRb = null;
-    private FixedJoint _grabJoint = null;
     public Transform carryPosition; // Position where the player carries the object
     public Transform cameraStart;
     public LayerMask pickupLayer; // Layer mask for pickable objects
+    public LayerMask depositLayer;
     private GameObject _carriedObject = null;
     public int characterShimmy;
+    public Transform playerTransorm;
 
 
     private CharacterController _characterController;
@@ -39,10 +38,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]private Transform _iceChestSpawn;
     [SerializeField]private IceChest _IceChestPrefab;
     private IceChest _iceChest;
+    public List<AudioClip> audioClips;
 
+    public Transform IceChestSpawn { get => _iceChestSpawn; set => _iceChestSpawn = value; }
 
     void Start()
     {
+        AudioSource audioSource = GetComponent<AudioSource>();
         _characterController = GetComponent<CharacterController>();
         _animator = GetComponent<Animator>();
         _playerInput = GameManager.Instance.GetPlayerInput();
@@ -51,7 +53,7 @@ public class PlayerController : MonoBehaviour
         _movementSpeedDebuff = 0;
         _iceChest = Instantiate(_IceChestPrefab);
         _iceChest.transform.position = _iceChestSpawn.transform.position;
-
+        playerTransorm = this.transform;
         // Ensure the character starts at ground level
         SetCharacterAtGroundLevel();
         
@@ -59,17 +61,25 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if(!_gameController.playingGame)
+        {
+            return;
+        }
         _isGrounded = _characterController.isGrounded;
         Move();
         Jump();
         ApplyGravity();
-        HandleGrab();
-        UpdateAnimator();
-        if (transform.position.y < -10f) // Adjust the threshold as per your scene's needs
+        HandlePickup();
+        HandleDeposit();
+        if (transform.position.y < -10f)
         {
-            _gameController.PlayerFellOffMap(); // Call GameController method to handle respawn
+            _gameController.PlayerFellOffMap();
         }
-        if (Input.GetKeyDown(KeyCode.E))
+    }
+
+    private void HandlePickup()
+    {
+        if (_playerInput.grab)
         {
             if (_carriedObject != null)
             {
@@ -82,7 +92,24 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-     private void OnTriggerEnter(Collider other)
+    private void HandleDeposit()
+    {
+        if(_playerInput.deposit)
+        {
+            if(_carriedObject.CompareTag("Ice"))
+            {
+            AudioSource.PlayClipAtPoint(audioClips[1], gameObject.transform.position);
+             DepositObject(DepositIce);   
+            }
+            if(_carriedObject.CompareTag("Brews"))
+            {   
+                AudioSource.PlayClipAtPoint(audioClips[0], gameObject.transform.position);
+                DepositObject(DepositBeer);
+            }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
     {
         
     }
@@ -93,11 +120,18 @@ public class PlayerController : MonoBehaviour
         {
             return;
         }
-        // Get the direction based on input
         Vector3 direction = new Vector3(_playerInput.horizontal, 0f, _playerInput.vertical).normalized;
         
         if (direction.magnitude >= 0.1f)
         {
+            if(_carriedObject.CompareTag("Ice"))
+            {
+            AudioSource.PlayClipAtPoint(audioClips[3], gameObject.transform.position);
+            }
+            if(_carriedObject.CompareTag("Brews"))
+            {   
+                AudioSource.PlayClipAtPoint(audioClips[2], gameObject.transform.position);
+            }
             Vector3 forward = cameraTransform.forward;
             Vector3 right = cameraTransform.right;
 
@@ -114,28 +148,22 @@ public class PlayerController : MonoBehaviour
 
             // Calculate the target rotation
             Quaternion targetRotation = Quaternion.LookRotation(desiredMoveDirection);
-            // Smoothly rotate towards the target direction
             transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
 
-            // Set running animation
             _animator.SetBool("isRunning", true);
         }
         else
         {
-            // Decelerate smoothly
             _moveDirection.x = 0f;
             _moveDirection.z = 0f;
 
-            // Set running animation
             _animator.SetBool("isRunning", false);
         }
 
         if (_isGrounded && _moveDirection.y < 0)
         {
-            _moveDirection.y = -2f; // Small negative value to stick the character to the ground
+            _moveDirection.y = -2f; // stick the character to the ground
         }
-
-        // Apply movement
         _characterController.Move(_moveDirection * Time.deltaTime);
     }
 
@@ -156,70 +184,14 @@ public class PlayerController : MonoBehaviour
         }
         else if (_moveDirection.y < 0)
         {
-            _moveDirection.y = -2f; // Reset the downward velocity when grounded
+            _moveDirection.y = -2f; 
         }
-
-        // Apply vertical movement
+  
         _characterController.Move(new Vector3(0, _moveDirection.y, 0) * Time.deltaTime);
 
         if (_isGrounded)
         {
             _animator.SetBool("isJumping", false);
-        }
-    }
-
-    void HandleGrab()
-    {
-        if (_playerInput.grab)
-        {
-            if (_isGrabbing)
-            {
-                ReleaseObject();
-            }
-            else
-            {
-                TryGrabObject();
-            }
-        }
-    }
-
-    void TryGrabObject()
-    {
-        RaycastHit hit;
-        if (Physics.Raycast(cameraTransform.position, cameraTransform.forward, out hit, grabRange))
-        {
-            InteractableObject interactableObject = hit.collider.GetComponent<InteractableObject>();
-            if (interactableObject != null)
-            {
-                if (interactableObject.isMovable)
-                {
-                    _grabbedObjectRb = hit.collider.GetComponent<Rigidbody>();
-                    if (_grabbedObjectRb != null)
-                    {
-                        _grabJoint = gameObject.AddComponent<FixedJoint>();
-                        _grabJoint.connectedBody = _grabbedObjectRb;
-                        _grabJoint.anchor = handTransform.localPosition;
-                        _grabbedObjectRb.transform.SetParent(handTransform);
-                        _isGrabbing = true;
-                    }
-                }
-                else
-                {
-                    // Logic for grabbing immovable objects like walls
-                    Debug.Log("Attempting to grab an immovable object.");
-                }
-            }
-        }
-    }
-
-    void ReleaseObject()
-    {
-        if (_grabJoint != null)
-        {
-            Destroy(_grabJoint);
-            _grabbedObjectRb.transform.SetParent(null);
-            _grabbedObjectRb = null;
-            _isGrabbing = false;
         }
     }
 
@@ -232,6 +204,11 @@ public class PlayerController : MonoBehaviour
             _carriedObject = hits[0].gameObject;
             _carriedObject.GetComponent<Rigidbody>().isKinematic = true; // Disable physics
             _carriedObject.transform.position = carryPosition.position;
+            if(_carriedObject.CompareTag("Brews"))
+            {
+                _carriedObject.GetComponent<Beer>().PlayResourceSound();
+
+            }
             _carriedObject.transform.SetParent(carryPosition);
         }
     }
@@ -245,13 +222,28 @@ public class PlayerController : MonoBehaviour
             _carriedObject = null;
         }
     }
-    
 
-    void UpdateAnimator()
+    void DepositObject(DepositDelegate deposit)
     {
-        // Update animator parameters if needed
+        Collider[] hits = Physics.OverlapSphere(transform.position, depositLayer);
+
+        if(hits.Length > 0)
+        {   deposit();
+            Destroy(_carriedObject);
+            _carriedObject = null;
+        }
+    }
+    public delegate void DepositDelegate();
+    public void DepositBeer()
+    {
+        _iceChest.AddBeers();
     }
 
+    public void DepositIce ()
+    {
+        _iceChest.AddIce();
+    }
+    
     void SetCharacterAtGroundLevel()
     {
         // Perform a raycast to find the ground level
@@ -268,7 +260,7 @@ public class PlayerController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarning("Ground not found! Make sure the groundLayer is set correctly.");
+            Debug.LogWarning("Ground not found!");
         }
     }
 
@@ -284,6 +276,11 @@ public class PlayerController : MonoBehaviour
 
     public IceChest GetPlayerIceChest()
     {
-        return _iceChest;
+        return this._iceChest;
+    }
+
+    public void SetTransform(Transform myTransform)
+    {
+        playerTransorm = myTransform;
     }
 }

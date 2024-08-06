@@ -6,12 +6,16 @@ public class PlayerInput : MonoBehaviour
     public float vertical;
     public bool jump;
     public bool grab;
+    public bool pause;
+    public bool deposit;
 
     void Update()
     {
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
         jump = Input.GetButtonDown("Jump");
-        grab = Input.GetButtonDown("Fire1"); // Assuming "Fire1" is mapped to the grab action (e.g., left mouse button)
+        grab = Input.GetButtonDown("Fire1");
+        deposit = Input.GetKeyDown(KeyCode.E);
+        pause = Input.GetKeyDown(KeyCode.Escape);
     }
 }

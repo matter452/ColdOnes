@@ -48,6 +48,8 @@ MonoBehaviour:
   vertical: 0
   jump: 0
   grab: 0
+  pause: 0
+  deposit: 0
 --- !u!1 &7124870632604813473
 GameObject:
   m_ObjectHideFlags: 0
@@ -93,7 +95,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 631ee53c891739c4495b5059333d560b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerManager: {fileID: 4870534924224553286, guid: d7869d0c0dd6b814db68d741a48f5bfd, type: 3}
+  _playerManager: {fileID: 3322639047768174457, guid: d7869d0c0dd6b814db68d741a48f5bfd, type: 3}
   _levelManager: {fileID: 7093766759637516445, guid: f5dcbeb89d55fdd4faa18a6d5fa7bdc6, type: 3}
-  _uiManager: {fileID: 0}
   input: {fileID: 9106240354554655505}
+  MainCamera: {fileID: 0}
+  playingGame: 0

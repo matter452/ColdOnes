@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 7407324040369077559}
   - component: {fileID: 2677545780915664810}
   - component: {fileID: 1393652023991462201}
+  - component: {fileID: 2416897507171137795}
   - component: {fileID: 2857429852037512630}
   - component: {fileID: -4358416547968236286}
   - component: {fileID: 8419114270625233429}
   - component: {fileID: 8887061165527371907}
-  - component: {fileID: 2416897507171137795}
   m_Layer: 7
   m_Name: ice-chest
   m_TagString: Pickup
@@ -88,6 +88,27 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!135 &2416897507171137795
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8960304864360592392}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.04
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!64 &2857429852037512630
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -153,6 +174,8 @@ MonoBehaviour:
   baseEnergy: 1.8335
   baseCapacity: 8
   baseCoolingRate: 0.1667
+  _warmBeers: 0
+  _cooledBeers: 0
   energy: 0
   capacity: 0
   coolingRate: 0
@@ -171,24 +194,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isMovable: 1
---- !u!135 &2416897507171137795
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8960304864360592392}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1.04
-  m_Center: {x: 0, y: 0, z: 0}

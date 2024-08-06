@@ -12,9 +12,13 @@ public class UpgradesUI : MonoBehaviour
     private Button _energyButton;
     private Button _coolingButton;
     private Button _nextUi;
+    private IceChest _iceChest;
+    private PlayerController _player;
 
     void Start()
-    {
+    {   
+        _player = GameManager.Instance.GetPlayer();
+        _iceChest = _player.GetPlayerIceChest();
         InitElements();
     }
     public void SetRootElement(UIManager uIManager,VisualElement activeUIRoot)
@@ -28,6 +32,10 @@ public class UpgradesUI : MonoBehaviour
         _currentEnergy = _root.Q<Label>("currentEnergy");
         _currentCooling = _root.Q<Label>("currentCooling");
 
+        _currentCapacity.text = _iceChest.capacity.ToString();
+        _currentEnergy.text = _iceChest.energy.ToString();
+        _currentCooling.text = _iceChest.coolingRate.ToString();
+
         _capacityButton = _root.Q<Button>("capacityButton");
         _energyButton = _root.Q<Button>("energyButton");
         _coolingButton = _root.Q<Button>("coolingButton");
@@ -36,23 +44,30 @@ public class UpgradesUI : MonoBehaviour
         _capacityButton.clicked += CapacityButtonClicked;
         _energyButton.clicked += EnergyButtonClicked;
         _coolingButton.clicked += CoolingButtonCLicked;
-        _nextUi.clicked += NextUIClicked;
+        _nextUi.clicked += NextUI;
     }
 
     private void CapacityButtonClicked()
     {
-        
+        _iceChest.Upgrade(UpgradeType.Capacity);
+        NextUI();
     }
     private void EnergyButtonClicked()
     {
-        
+        _iceChest.Upgrade(UpgradeType.Energy);
+        NextUI();
     }
     private void CoolingButtonCLicked()
     {
-        
+        _iceChest.Upgrade(UpgradeType.CoolingRate);
+        NextUI();
     }
-    private void NextUIClicked()
-    {
-        
+    private void NextUI()
+    {   
+        GameManager.Instance.StartGame();
+        _player.SetTransform(GameManager.Instance.transform);
+       _iceChest.SetTransform(_player.IceChestSpawn);
+
+        _uiManager.DisplayUI(UIManager.e_UiDocuments.LevelStartUI);
     }
 }

@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     private Vector3 lastPlayerPosition;
     private ScoreManager _scoreManager;
     public GameObject MainCamera;
+    public bool playingGame;
     private static GameManager _instance;
     // Singleton instance
     public static GameManager Instance{
@@ -30,7 +31,8 @@ public class GameManager : MonoBehaviour
         }
         _playerManager = Instantiate(_playerManager, transform);
         _levelManager = Instantiate(_levelManager, transform);
-        _uiManager = UIManager.Instance;
+        _scoreManager = new ScoreManager();
+        
     }
     
     
@@ -47,11 +49,29 @@ public class GameManager : MonoBehaviour
         }
     } */
 
-    public void StartGame()
+
+    void Start()
     {
+        _uiManager = UIManager.Instance;
+
+    }
+
+    void Update()
+    {
+        if(GetPlayerInput().pause)
+        {
+            _uiManager.DisplayUI(UIManager.e_UiDocuments.PauseMenuUI);
+            playingGame = false;
+        }
+    }
+
+    public void StartGame()
+    {   
         _levelManager.StartLevel();
-        _playerManager.SpawnPlayer(Instance.transform);
-        _scoreManager = new ScoreManager();
+        if(_levelManager.CurrentLevel == 1)
+        {
+            _playerManager.SpawnPlayer(Instance.transform);
+        }
         _uiManager.DisplayUI(UIManager.e_UiDocuments.LevelStartUI);
     }
 
@@ -102,9 +122,17 @@ public class GameManager : MonoBehaviour
         return _instance._playerManager;
     }
 
+    public PlayerController GetPlayer()
+    {
+        return _playerManager.GetPlayer();
+    }
+
     public static UIManager GetUIManager()
     {
         return _instance._uiManager;
     }
-    public static ScoreManager ScoreManager { get => _instance._scoreManager; set => _instance._scoreManager = value; }
+    public static ScoreManager GetScoreManager()
+    {
+        return _instance._scoreManager;
+    }
 }

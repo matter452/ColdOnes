@@ -19,7 +19,7 @@ public class PauseMenuUI : MonoBehaviour
         _resumeButton = _root.Q<Button>("resumeButton");
         _quitButton = _root.Q<Button>("quitButton");
 
-        _quitButton.clicked += StartButtonCLicked;
+        _quitButton.clicked += QuitButtonCLicked;
         _resumeButton.clicked += ResumeButtonClicked;
     }
 
@@ -27,12 +27,13 @@ public class PauseMenuUI : MonoBehaviour
     {   _uiManager = uIManager;
         _root = activeUIRoot;
     }
-    private void StartButtonCLicked()
+    private void QuitButtonCLicked()
     {
-
+        _uiManager.DisplayUI(UIManager.e_UiDocuments.MainMenuUI);
     }
     private void ResumeButtonClicked()
     {
-
+        GameManager.Instance.playingGame = true;
+        _uiManager.DisplayUI(UIManager.e_UiDocuments.GameUI);
     }
 }

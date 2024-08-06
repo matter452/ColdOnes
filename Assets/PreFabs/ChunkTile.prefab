@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8825274955625666173}
   - component: {fileID: 8916241005118072783}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: NextChunkSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,21 +72,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6901449968210609304
-Transform:
+--- !u!224 &6901449968210609304
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1350826859409162226}
-  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 13, y: 1, z: 20}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7706272065060254549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!33 &6109294990573009448
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -115,7 +119,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9988c92b770debd4c90b02ed4ff273df, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -168,7 +172,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3176363178408204036}
-  m_Layer: 3
+  m_Layer: 0
   m_Name: NextChunkSpawnObsolete
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -190,6 +194,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 7706272065060254549}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3239469542594035554
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2521500503312280830}
+  m_Layer: 0
+  m_Name: buildlane2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2521500503312280830
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3239469542594035554}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 53.7, y: 0, z: -90.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7706272065060254549}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7146297235072462452
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,8 +236,8 @@ GameObject:
   - component: {fileID: 7706272065060254549}
   - component: {fileID: 3766560999671552488}
   - component: {fileID: -7230119607937074839}
-  - component: {fileID: 159661041788437760}
-  m_Layer: 3
+  - component: {fileID: 6821373955135735203}
+  m_Layer: 0
   m_Name: ChunkTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -225,6 +260,8 @@ Transform:
   - {fileID: 6901449968210609304}
   - {fileID: 3176363178408204036}
   - {fileID: 8825274955625666173}
+  - {fileID: 5903769453663095592}
+  - {fileID: 2521500503312280830}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &3766560999671552488
@@ -268,7 +305,7 @@ TerrainCollider:
   serializedVersion: 2
   m_TerrainData: {fileID: 0}
   m_EnableTreeColliders: 1
---- !u!114 &159661041788437760
+--- !u!114 &6821373955135735203
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -281,3 +318,47 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _nextChunkSpawn: {fileID: 8825274955625666173}
+  _smallObjects:
+  - {fileID: 3743753639864072315, guid: 34788b30add9e72439c38d7308e9c012, type: 3}
+  _mediumObjects:
+  - {fileID: 5605962190011072726, guid: 85a97115d9e2c01489ae2c70d55813aa, type: 3}
+  _largeObjects:
+  - {fileID: 3345874994491468854, guid: 8518803c1b98fa74590a720a43710ee3, type: 3}
+  _xLObjects:
+  - {fileID: 8427129789734184352, guid: 379d23429c4da5844bea98027a9b338d, type: 3}
+  - {fileID: 9006836394562102405, guid: 0da187ab325f71e4a9c6b99b9b599acd, type: 3}
+  - {fileID: 8088135526796106278, guid: 8702378c227d9ee45a5b4f594f4a62dd, type: 3}
+  - {fileID: 5653151521263401692, guid: f05030334485c4240a1383d7bf388fb8, type: 3}
+  buildingLane1: {fileID: 5903769453663095592}
+  buildingLane2: {fileID: 2521500503312280830}
+--- !u!1 &8069781871167770812
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5903769453663095592}
+  m_Layer: 0
+  m_Name: buildlane1
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5903769453663095592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8069781871167770812}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -52.6, y: 0, z: -90.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7706272065060254549}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

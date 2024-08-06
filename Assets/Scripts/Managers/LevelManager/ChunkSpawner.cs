@@ -8,6 +8,7 @@ public class ChunkSpawner : MonoBehaviour
     [SerializeField] private Chunk _endChunk;
     [SerializeField] private int _numberOfInitialChunks;
     [SerializeField] private float _initialChunkPositionAdjust = 0f;
+    [SerializeField] private ChunkGridManager _gridManager;
     Transform nextChunkSpawn;
     private int _levelTotalChunksToSpawn;
     private int _chunksSpawned;
@@ -39,11 +40,16 @@ public class ChunkSpawner : MonoBehaviour
         _SetNextChunkSpawn(initialChunk);
         ActiveChunksSetLast(initialChunk);
 
-        for(int i = 1; _chunksSpawned < _numberOfInitialChunks; i++){
+        for(int i = 1; i <= _numberOfInitialChunks; i++){
             Chunk newChunk = SpawnChunk();
             _chunksSpawned++;
             ActiveChunksSetLast(newChunk);
         }
+    }
+
+    public void ResetChunkCount()
+    {
+        _chunksSpawned = 0;
     }
     public Chunk SpawnChunk()
     {   
@@ -116,5 +122,34 @@ public class ChunkSpawner : MonoBehaviour
     public void SetLevelTotalChunksToSpawn(int amount)
     {
         _levelTotalChunksToSpawn = amount;
+    }
+
+    public void ClearActives()
+    {
+        _activeChunks.Clear();
+    }
+
+    public void ClearInactives()
+    {
+        _inactiveChunks.Clear();
+    }
+
+    public void DeChunkLevel()
+    {
+        foreach(Chunk chunk in _activeChunks)
+        {   
+            Destroy(chunk.gameObject);
+        }
+        foreach (Chunk chunk in _inactiveChunks)
+        {   
+            Destroy(chunk.gameObject);
+        }
+        ClearActives();
+        ClearInactives();
+    }
+
+    public void ReChunkLevel()
+    {   _chunksSpawned = 0;
+        InitializeFirstChunks();
     }
 }

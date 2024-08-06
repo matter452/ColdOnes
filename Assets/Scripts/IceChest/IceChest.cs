@@ -11,8 +11,8 @@ public class IceChest : MonoBehaviour
     public float baseCapacity = 8f;
     public float baseCoolingRate = .1667f;
     private float _coolerEnergyLoad = 0f;
-    private float _warmBeers;
-    private float _cooledBeers;
+    public float _warmBeers;
+    public float _cooledBeers;
 
     public float energy;
     public float capacity;
@@ -26,10 +26,14 @@ public class IceChest : MonoBehaviour
     private float _overHeatCooldownTimeRemaining;
     [SerializeField] private float isIcedCoolingBuff = 0.03334f;
     private Coroutine _isCooledCoroutine;
+    private Transform _iceChestTransform;
+    private ScoreManager _scoreManager;
 
 
     void Start()
-    {
+    {   
+        _scoreManager = GameManager.GetScoreManager();
+        _iceChestTransform = this.transform;
         _upgrades = new Upgrades(this);
         ResetToBaseValues();
     }
@@ -68,6 +72,8 @@ public class IceChest : MonoBehaviour
         energy = baseEnergy;
         capacity = baseCapacity;
         coolingRate = baseCoolingRate;
+        _cooledBeers = 0f;
+        _warmBeers = 0f;
         if (_isCooledCoroutine != null)
         {
             StopCoroutine(_isCooledCoroutine);
@@ -153,23 +159,48 @@ public class IceChest : MonoBehaviour
         return _movementPenalty;
     }
 
-    public int GetWarmOnes()
+    public float GetWarmOnes()
     {
-        return Mathf.RoundToInt(_warmBeers);
+        return _warmBeers;
     }
 
-    public int GetColdOnes()
+    public float GetColdOnes()
     {
-        return Mathf.RoundToInt(_cooledBeers);
+        return _cooledBeers;
     }
 
-    /* void Update()
+    public int GetCalculatedColdOnes()
     {
-        // Example input handling for upgrades (for demonstration purposes)
-        if (Input.GetKeyDown(KeyCode.U)) Upgrade(UpgradeType.Energy);
-        if (Input.GetKeyDown(KeyCode.I)) Upgrade(UpgradeType.Capacity);
-        if (Input.GetKeyDown(KeyCode.O)) Upgrade(UpgradeType.CoolingRate);
-       
-        Debug.Log($"Energy: {energy}, Capacity: {capacity}, CoolingRate: {coolingRate}");
-    } */
+        return Mathf.RoundToInt((float)_cooledBeers / (float)baseCoolingRate);
+    }
+
+    public int GetCalculatedWarmOnes()
+    {
+        return Mathf.RoundToInt( _warmBeers / baseCoolingRate);
+    }
+
+    public void SetTransform(Transform mytransform)
+    {
+        _iceChestTransform =  mytransform;
+    }
+
+    public void UpdateScore()
+    {
+        _scoreManager.CurrentScore = GetCalculatedColdOnes()*_scoreManager.ScorePerColdOne +
+        GetCalculatedWarmOnes()*_scoreManager.ScorePerWarmOne;
+    }
+    public bool DrinkBeer()
+    {
+        if(GetCalculatedWarmOnes() > 0)
+        {
+            _warmBeers -= coolingRate;
+            return true;
+        }
+        if(GetCalculatedColdOnes() > 0)
+        {
+            _cooledBeers -= coolingRate;
+            return true;
+        }
+        return false;
+    }
 }
