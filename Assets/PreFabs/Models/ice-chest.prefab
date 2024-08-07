@@ -11,11 +11,10 @@ GameObject:
   - component: {fileID: 7407324040369077559}
   - component: {fileID: 2677545780915664810}
   - component: {fileID: 1393652023991462201}
-  - component: {fileID: 2416897507171137795}
+  - component: {fileID: 1655814061365604897}
   - component: {fileID: 2857429852037512630}
+  - component: {fileID: 2416897507171137795}
   - component: {fileID: -4358416547968236286}
-  - component: {fileID: 8419114270625233429}
-  - component: {fileID: 8887061165527371907}
   m_Layer: 7
   m_Name: ice-chest
   m_TagString: Pickup
@@ -88,27 +87,29 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &2416897507171137795
-SphereCollider:
+--- !u!114 &1655814061365604897
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8960304864360592392}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 256
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1.04
-  m_Center: {x: 0, y: 0, z: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6b005bb46b8d4e42a05e1a09f4a5dde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _iceEnergyReductionAmount: 0.8335
+  baseEnergy: 11
+  baseCapacity: 42
+  baseCoolingRate: 0.5
+  energy: 0
+  capacity: 0
+  coolingRate: 0
+  _overHeatCooldown: 5
+  isIcedCoolingBuff: 0.03333334
+  ScorePerColdOne: 10
+  ScorePerWarmOne: 5
 --- !u!64 &2857429852037512630
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -131,6 +132,27 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!135 &2416897507171137795
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8960304864360592392}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.04
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &-4358416547968236286
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -139,7 +161,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8960304864360592392}
   serializedVersion: 4
-  m_Mass: 1
+  m_Mass: 8
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -158,39 +180,3 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8419114270625233429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8960304864360592392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d6b005bb46b8d4e42a05e1a09f4a5dde, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _iceEnergyReductionAmount: 0.8335
-  baseEnergy: 1.8335
-  baseCapacity: 8
-  baseCoolingRate: 0.1667
-  _warmBeers: 0
-  _cooledBeers: 0
-  energy: 0
-  capacity: 0
-  coolingRate: 0
-  _overHeatCooldown: 5
-  isIcedCoolingBuff: 0.03334
---- !u!114 &8887061165527371907
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8960304864360592392}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5da2aaa9cd573404bbe3df7c6dadb23b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isMovable: 1

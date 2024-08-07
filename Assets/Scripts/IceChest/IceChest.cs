@@ -1,38 +1,44 @@
+using System;
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class IceChest : MonoBehaviour
 {
-    private float _totalBeers;
-    [SerializeField]private float _iceEnergyReductionAmount = 0.8335f;
+    private int _totalBeers;
+    [SerializeField] private float _iceEnergyReductionAmount = 0.8335f;
     private Upgrades _upgrades;
-    public float baseEnergy = 1.8335f;
-    public float baseCapacity = 8f;
-    public float baseCoolingRate = .1667f;
+    public float baseEnergy = 11;
+    public int baseCapacity = 42;
+    public float baseCoolingRate = 1f / 2f; // 1 beer every 2 seconds
     private float _coolerEnergyLoad = 0f;
-    public float _warmBeers;
-    public float _cooledBeers;
+    public int TotalColdBeers { get; private set; }
+    public int TotalWarmBeers { get; private set; }
+    public int CurrentScore { get; private set; }
+    public int LevelTargetScore { get; private set; }
+    public event Action<int> onColdsChanged;
+    public event Action<int> onWarmsChanged;
+    public event Action<int> onScoreChanged;
 
     public float energy;
-    public float capacity;
+    public int capacity;
     public float coolingRate;
     private float _movementPenalty;
     private bool _iced;
     private float _iceCoolingBuffDuration = 4f;
     private float _iceBuffTimeRemaining;
     private bool _isOverheated;
-    [SerializeField] float _overHeatCooldown = 5f;
+    [SerializeField] private float _overHeatCooldown = 5f;
     private float _overHeatCooldownTimeRemaining;
-    [SerializeField] private float isIcedCoolingBuff = 0.03334f;
+    [SerializeField] private float isIcedCoolingBuff = 1f / 30f; // 1 beer every 30 seconds
     private Coroutine _isCooledCoroutine;
     private Transform _iceChestTransform;
-    private ScoreManager _scoreManager;
 
+
+    public int ScorePerColdOne = 10;
+    public int ScorePerWarmOne = 5; 
 
     void Start()
-    {   
-        _scoreManager = GameManager.GetScoreManager();
+    {
         _iceChestTransform = this.transform;
         _upgrades = new Upgrades(this);
         ResetToBaseValues();
@@ -40,30 +46,34 @@ public class IceChest : MonoBehaviour
 
     void Update()
     {
-
     }
-//todo: add logic to display message of too many beers.
+
     public void AddBeers()
-    {   float amount = 1f;
-        if(_totalBeers + amount > capacity)
+    {
+        int amount = 6; // Add 6 beers each time
+        if (_totalBeers + amount > capacity)
         {
-            Debug.Log("not enough capacity");
+            Debug.Log("Not enough capacity");
             return;
         }
+        Debug.Log("Beeeeer Added");
         SetCoolerEnergyLoad(amount);
-        _totalBeers+= amount;
-        _warmBeers+= amount;
-        if(_isCooledCoroutine == null)
+        Debug.Log("Cooler Energy load: "+_coolerEnergyLoad);
+        _totalBeers += amount;
+        TotalWarmBeers += amount;
+        onWarmsChanged?.Invoke(TotalWarmBeers);
+        if (_isCooledCoroutine == null)
         {
-           _isCooledCoroutine = StartCoroutine(CoolBeers());
+            _isCooledCoroutine = StartCoroutine(CoolBeers());
         }
     }
 
     public void AddIce()
-    {   
+    {
         SetCoolerEnergyLoad(-_iceEnergyReductionAmount);
         _iced = true;
         _iceBuffTimeRemaining = _iceCoolingBuffDuration;
+        Debug.Log("Ice added");
         StartCoroutine(IceCoolingBuffDuration());
     }
 
@@ -72,13 +82,17 @@ public class IceChest : MonoBehaviour
         energy = baseEnergy;
         capacity = baseCapacity;
         coolingRate = baseCoolingRate;
-        _cooledBeers = 0f;
-        _warmBeers = 0f;
+        TotalColdBeers = 0;
+        TotalWarmBeers = 0;
+        CurrentScore = 0;
+        _totalBeers = 0;
+        onColdsChanged?.Invoke(TotalColdBeers);
+        onWarmsChanged?.Invoke(TotalWarmBeers);
+        onScoreChanged?.Invoke(CurrentScore);
         if (_isCooledCoroutine != null)
         {
             StopCoroutine(_isCooledCoroutine);
             _isCooledCoroutine = null;
-
         }
     }
 
@@ -88,36 +102,43 @@ public class IceChest : MonoBehaviour
     }
 
     IEnumerator CoolBeers()
-    {   
-        float beersCooled = 0;
-        while(_warmBeers > 0)
-        {   
-            if(_iced && !_isOverheated){
-                beersCooled = (coolingRate+isIcedCoolingBuff) * Time.deltaTime;
+    {
+        while (TotalWarmBeers > 0)
+        {
+            if (_iced && !_isOverheated)
+            {   Debug.Log("In coroutine: Cooling Down a beer");
+                yield return new WaitForSeconds(1 / (coolingRate + isIcedCoolingBuff));
+                _coolerEnergyLoad -= 1;
+                Debug.Log("Cooler Energy load: "+_coolerEnergyLoad);
             }
-            if(_iced && _isOverheated)
+            else if (_iced && _isOverheated)
             {
-                beersCooled = isIcedCoolingBuff * Time.deltaTime;
+                yield return new WaitForSeconds(1 / isIcedCoolingBuff);
             }
-            if(!_iced && _isOverheated)
+            else if (!_iced && _isOverheated)
             {
-                beersCooled = 0;
+                yield return null;
+                continue;
             }
-            if(!_iced && !_isOverheated)
+            else if (!_iced && !_isOverheated)
             {
-                beersCooled = coolingRate * Time.deltaTime;
+                yield return new WaitForSeconds(1 / coolingRate);
             }
-            _warmBeers = Mathf.Max(0, _warmBeers-beersCooled);
-            _cooledBeers += beersCooled;
-            yield return null;
+
+            UpdateWarmBeers(-1);
+            UpdateColdBeers(1);
+            UpdateScore(ScorePerColdOne);
+            
+            Debug.Log("Current Score: "+CurrentScore);
         }
         _isCooledCoroutine = null;
     }
 
     IEnumerator IceCoolingBuffDuration()
     {
-        while(_iceBuffTimeRemaining > 0)
+        while (_iceBuffTimeRemaining > 0)
         {
+            Debug.Log("We got a ice Cooling rate buff!");
             yield return new WaitForSeconds(1f);
             _iceBuffTimeRemaining -= 1f;
         }
@@ -125,26 +146,48 @@ public class IceChest : MonoBehaviour
     }
 
     IEnumerator OverheatCooldown()
-    {   _overHeatCooldownTimeRemaining = _overHeatCooldown;
-        while(_overHeatCooldownTimeRemaining > 0)
+    {
+        _overHeatCooldownTimeRemaining = _overHeatCooldown;
+        while (_overHeatCooldownTimeRemaining > 0)
         {
             yield return new WaitForSeconds(1f);
             _overHeatCooldownTimeRemaining -= 1f;
         }
+
         _isOverheated = false;
+        Debug.Log("Overheat cooldown expired");
     }
 
-    public float GetTotalBeers()
+    public void UpdateColdBeers(int amount)
     {
-        return _totalBeers;
+        TotalColdBeers += amount;
+        onColdsChanged?.Invoke(TotalColdBeers);
+    }
+
+    public void UpdateWarmBeers(int amount)
+    {
+        TotalWarmBeers += amount;
+        onWarmsChanged?.Invoke(TotalWarmBeers);
+    }
+
+    public void UpdateScore(int amount)
+    {
+        CurrentScore += amount;
+        onScoreChanged?.Invoke(CurrentScore);
+    }
+
+    public bool ScoreMet()
+    {
+        return CurrentScore >= LevelTargetScore;
     }
 
     private void SetCoolerEnergyLoad(float loadAmount)
     {
         _coolerEnergyLoad += loadAmount;
-        if(_coolerEnergyLoad > baseEnergy)
+        if (_coolerEnergyLoad > baseEnergy)
         {
             _isOverheated = true;
+            Debug.Log("Uhh we overheated!: overheatbool = " + _isOverheated);
             StartCoroutine(OverheatCooldown());
         }
     }
@@ -159,46 +202,23 @@ public class IceChest : MonoBehaviour
         return _movementPenalty;
     }
 
-    public float GetWarmOnes()
+    public void SetTransform(Transform myTransform)
     {
-        return _warmBeers;
+        _iceChestTransform = myTransform;
     }
 
-    public float GetColdOnes()
-    {
-        return _cooledBeers;
-    }
-
-    public int GetCalculatedColdOnes()
-    {
-        return Mathf.RoundToInt((float)_cooledBeers / (float)baseCoolingRate);
-    }
-
-    public int GetCalculatedWarmOnes()
-    {
-        return Mathf.RoundToInt( _warmBeers / baseCoolingRate);
-    }
-
-    public void SetTransform(Transform mytransform)
-    {
-        _iceChestTransform =  mytransform;
-    }
-
-    public void UpdateScore()
-    {
-        _scoreManager.CurrentScore = GetCalculatedColdOnes()*_scoreManager.ScorePerColdOne +
-        GetCalculatedWarmOnes()*_scoreManager.ScorePerWarmOne;
-    }
     public bool DrinkBeer()
     {
-        if(GetCalculatedWarmOnes() > 0)
+        if (TotalWarmBeers > 0)
         {
-            _warmBeers -= coolingRate;
+            UpdateWarmBeers(-1);
+            UpdateScore(ScorePerWarmOne);
             return true;
         }
-        if(GetCalculatedColdOnes() > 0)
+        if (TotalColdBeers > 0)
         {
-            _cooledBeers -= coolingRate;
+            UpdateColdBeers(-1);
+            UpdateScore(ScorePerColdOne);
             return true;
         }
         return false;

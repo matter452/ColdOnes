@@ -41,8 +41,16 @@ public class UIManager : MonoBehaviour
     /// Awake is called when the script instance is being loaded.
     /// </summary>
     void Awake()
-    {   _instance = this;
-        uiDocComponent = gameObject.GetComponent<UIDocument>();
+    {   if (_instance == null)
+        {
+            _instance = this;
+            DontDestroyOnLoad(gameObject);
+            uiDocComponent = gameObject.GetComponent<UIDocument>();
+        }
+        else
+        {
+            Destroy(gameObject); // Destroy duplicate instances
+        }
         
     }
 
@@ -61,7 +69,8 @@ public class UIManager : MonoBehaviour
     }
 
     public void DisplayUI(e_UiDocuments document)
-    {
+    {   
+        RemoveActiveUI();
         ActiveUI = document;
         VisualTreeAsset activeUI = ListOfUIs[(int)ActiveUI].UXMLDocument;
         uiDocComponent.visualTreeAsset = activeUI;
@@ -94,6 +103,22 @@ public class UIManager : MonoBehaviour
                 levelStartUI.SetRootElement(this, activeUIRoot);
                 break;
         }
+    }
+
+    private void RemoveActiveUI()
+    {
+        if (startMenu != null) Destroy(startMenu);
+        if (pauseMenu != null) Destroy(pauseMenu);
+        if (gameplayUI != null) Destroy(gameplayUI);
+        if (scoreUI != null) Destroy(scoreUI);
+        if (upgradeUI != null) Destroy(upgradeUI);
+        if (levelStartUI != null) Destroy(levelStartUI);
+        startMenu = null;
+        pauseMenu = null;
+        gameplayUI = null;
+        scoreUI = null;
+        upgradeUI = null;
+        levelStartUI = null;
     }
 
 }

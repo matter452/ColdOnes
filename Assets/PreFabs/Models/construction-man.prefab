@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 3258227609031285003}
   - component: {fileID: 4386451508774502217}
   - component: {fileID: 706282671104978658}
+  - component: {fileID: 1631109070428559887}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -141,13 +142,109 @@ MonoBehaviour:
   xSpeed: 120
   ySpeed: 120
   yMinLimit: -20
-  yMaxLimit: 80
+  yMaxLimit: 360
   distanceMin: 15
   distanceMax: 20
   cameraMode: 0
   isometricOffset: {x: 20, y: 20, z: 1}
   isometricFOV: 30
   followFOV: 60
+--- !u!82 &1631109070428559887
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2438147864866585943}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 785401d1d72274e408a61085510bc28f, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 0.233
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 104
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &9159418286676733604
 GameObject:
   m_ObjectHideFlags: 0
@@ -306,11 +403,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseSpeed: 40
-  appliedMoveSpeed: 0
+  appliedMoveSpeed: 40
   jumpForce: 7
-  rotationSpeed: 30
+  rotationSpeed: 360
   cameraTransform: {fileID: 8526861252363064097}
-  handTransform: {fileID: 0}
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -325,11 +421,17 @@ MonoBehaviour:
     m_Bits: 128
   depositLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   characterShimmy: 0
   playerTransorm: {fileID: 0}
   _iceChestSpawn: {fileID: 8460121475287567432}
-  _IceChestPrefab: {fileID: 8419114270625233429, guid: 52e542e8222321a43a2a5421616f382a, type: 3}
+  _IceChestPrefab: {fileID: 1655814061365604897, guid: 52e542e8222321a43a2a5421616f382a, type: 3}
+  audioClips:
+  - {fileID: 8300000, guid: acf3b500249c31b42a976fd2e090755c, type: 3}
+  - {fileID: 8300000, guid: d72a938f16c0f644c9040ac674320664, type: 3}
+  - {fileID: 8300000, guid: acf3b500249c31b42a976fd2e090755c, type: 3}
+  - {fileID: 8300000, guid: 345af966578544848bacf2878c7175a9, type: 3}
+  - {fileID: 8300000, guid: d905313b784cd2a40a3561e0c8f09a7b, type: 3}
 --- !u!143 &8315770960740621536
 CharacterController:
   m_ObjectHideFlags: 0
@@ -388,7 +490,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0

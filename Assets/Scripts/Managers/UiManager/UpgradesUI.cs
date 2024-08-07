@@ -64,7 +64,7 @@ public class UpgradesUI : MonoBehaviour
     }
     private void NextUI()
     {   
-        GameManager.Instance.StartGame();
+        GameManager.Instance.StartNextLevel();
         _player.SetTransform(GameManager.Instance.transform);
        _iceChest.SetTransform(_player.IceChestSpawn);
 

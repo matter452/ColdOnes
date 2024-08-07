@@ -1,13 +1,12 @@
 using UnityEngine;
 using TMPro;
 using Unity.VisualScripting;
-using UnityEditor.Build.Content;
 using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour
 {   
     public float baseSpeed = 30f;
-    public float appliedMoveSpeed;
+    public float appliedMoveSpeed = 30f;
     public float jumpForce = 9f;
     public float rotationSpeed = 720f;
     public Transform cameraTransform; // Reference to the main camera transform
@@ -61,7 +60,7 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if(!_gameController.playingGame)
+        if(_gameController.playingGame == false)
         {
             return;
         }
@@ -94,17 +93,23 @@ public class PlayerController : MonoBehaviour
 
     private void HandleDeposit()
     {
+        if(_carriedObject == null || _carriedObject.GetComponent<IceChest>())
+            {
+                return;
+            }
         if(_playerInput.deposit)
         {
             if(_carriedObject.CompareTag("Ice"))
             {
             AudioSource.PlayClipAtPoint(audioClips[1], gameObject.transform.position);
-             DepositObject(DepositIce);   
+             DepositObject(DepositIce);
+             return;
             }
             if(_carriedObject.CompareTag("Brews"))
             {   
                 AudioSource.PlayClipAtPoint(audioClips[0], gameObject.transform.position);
                 DepositObject(DepositBeer);
+                return;
             }
         }
     }
@@ -116,22 +121,11 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {   
-        if(isInteracting)
-        {
-            return;
-        }
         Vector3 direction = new Vector3(_playerInput.horizontal, 0f, _playerInput.vertical).normalized;
         
         if (direction.magnitude >= 0.1f)
         {
-            if(_carriedObject.CompareTag("Ice"))
-            {
-            AudioSource.PlayClipAtPoint(audioClips[3], gameObject.transform.position);
-            }
-            if(_carriedObject.CompareTag("Brews"))
-            {   
-                AudioSource.PlayClipAtPoint(audioClips[2], gameObject.transform.position);
-            }
+        
             Vector3 forward = cameraTransform.forward;
             Vector3 right = cameraTransform.right;
 
@@ -209,6 +203,11 @@ public class PlayerController : MonoBehaviour
                 _carriedObject.GetComponent<Beer>().PlayResourceSound();
 
             }
+            if(_carriedObject.GetComponent<IceChest>())
+            {
+                AudioSource.PlayClipAtPoint(audioClips[4], gameObject.transform.position);
+
+            }
             _carriedObject.transform.SetParent(carryPosition);
         }
     }
@@ -217,6 +216,14 @@ public class PlayerController : MonoBehaviour
     {
         if (_carriedObject != null)
         {
+            if(_carriedObject.CompareTag("Ice"))
+            {
+            AudioSource.PlayClipAtPoint(audioClips[4], gameObject.transform.position);
+            }
+            if(_carriedObject.CompareTag("Brews"))
+            {   
+                AudioSource.PlayClipAtPoint(audioClips[3], gameObject.transform.position);
+            }
             _carriedObject.GetComponent<Rigidbody>().isKinematic = false; // Enable physics
             _carriedObject.transform.SetParent(null);
             _carriedObject = null;
@@ -229,7 +236,13 @@ public class PlayerController : MonoBehaviour
 
         if(hits.Length > 0)
         {   deposit();
-            Destroy(_carriedObject);
+            Resource instance =_carriedObject.GetComponent<Resource>();
+
+            if (instance != null)
+        {
+            instance.DestroyResource();
+        }
+            _carriedObject.transform.SetParent(null);
             _carriedObject = null;
         }
     }

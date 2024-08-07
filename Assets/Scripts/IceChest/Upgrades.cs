@@ -42,7 +42,7 @@ public class Upgrades
                     _iceChest.energy += _iceChest.baseEnergy *(0.1f*upgrade.Value);
                     break;
                 case UpgradeType.Capacity:
-                    _iceChest.capacity += upgrade.Value * 5; 
+                    _iceChest.capacity += upgrade.Value * 6; 
                     break;
                 case UpgradeType.CoolingRate:
                     _iceChest.coolingRate += upgrade.Value * 2; 
@@ -55,7 +55,7 @@ public class Upgrades
 
     private void ApplyDebuffs()
     {
-        _iceChest.energy -= _upgradeLevels[UpgradeType.CoolingRate] * .008335f;
+        _iceChest.energy -= _upgradeLevels[UpgradeType.CoolingRate] * 1;
         _iceChest.coolingRate *= 1-_upgradeLevels[UpgradeType.Capacity] * 0.05f; 
         _playerSpeedDebuff = _upgradeLevels[UpgradeType.Energy] * 0.05f;
         _iceChest.SetMovementPenalty(_playerSpeedDebuff);

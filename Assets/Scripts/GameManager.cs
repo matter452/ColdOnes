@@ -10,9 +10,10 @@ public class GameManager : MonoBehaviour
     private Transform _playerSpawnPosition;
     public PlayerInput input;
     private Vector3 lastPlayerPosition;
-    private ScoreManager _scoreManager;
+    [SerializeReference]
     public GameObject MainCamera;
     public bool playingGame;
+    private IceChest _playerIceChest;
     private static GameManager _instance;
     // Singleton instance
     public static GameManager Instance{
@@ -31,8 +32,6 @@ public class GameManager : MonoBehaviour
         }
         _playerManager = Instantiate(_playerManager, transform);
         _levelManager = Instantiate(_levelManager, transform);
-        _scoreManager = new ScoreManager();
-        
     }
     
     
@@ -51,7 +50,7 @@ public class GameManager : MonoBehaviour
 
 
     void Start()
-    {
+    {   playingGame = false;
         _uiManager = UIManager.Instance;
 
     }
@@ -67,12 +66,16 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {   
-        _levelManager.StartLevel();
-        if(_levelManager.CurrentLevel == 1)
-        {
-            _playerManager.SpawnPlayer(Instance.transform);
-        }
+        _levelManager.InitiWorld();
+        _playerManager.SpawnPlayer(Instance._playerSpawnPosition);
+        _playerIceChest = _playerManager.GetIceChest();
         _uiManager.DisplayUI(UIManager.e_UiDocuments.LevelStartUI);
+    }
+
+    public void StartNextLevel()
+    {
+        
+            _levelManager.ReInitWorld();
     }
 
     public Transform GetInitialSpawn()
@@ -101,7 +104,7 @@ public class GameManager : MonoBehaviour
     {
         if (_player != null)
         {
-            _player.transform.position = lastPlayerPosition;
+            _player.transform.position = Vector3.zero;
         }
     }
 
@@ -130,9 +133,5 @@ public class GameManager : MonoBehaviour
     public static UIManager GetUIManager()
     {
         return _instance._uiManager;
-    }
-    public static ScoreManager GetScoreManager()
-    {
-        return _instance._scoreManager;
     }
 }

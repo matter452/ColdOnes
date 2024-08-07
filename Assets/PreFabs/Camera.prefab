@@ -107,14 +107,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  startPosition: {fileID: 0}
   distance: -10
-  xSpeed: 120
+  xSpeed: 30
   ySpeed: 120
   yMinLimit: -20
   yMaxLimit: 80
   distanceMin: 2
   distanceMax: 10
+  cameraMode: 0
+  isometricOffset: {x: 20, y: 20, z: 1}
+  isometricFOV: 57.3
+  followFOV: 60
 --- !u!54 &-3146260259024934912
 Rigidbody:
   m_ObjectHideFlags: 0

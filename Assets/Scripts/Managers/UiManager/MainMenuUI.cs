@@ -31,6 +31,6 @@ public class MainMenuUI : MonoBehaviour
     }
     private void QuitButtonClicked()
     {
-
+        Application.Quit();
     }
 }

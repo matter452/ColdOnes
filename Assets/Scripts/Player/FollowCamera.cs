@@ -6,16 +6,16 @@ public class FollowCamera : MonoBehaviour
 {
     public enum CameraMode { FreeFollow, Isometric }
 
-    public Transform target; // The target (usually the player)
-    public float distance = 10f; // Distance from the target
-    public float xSpeed = 20.0f; // Speed of the camera in the X axis
-    public float ySpeed = 20.0f; // Speed of the camera in the Y axis
-    public float yMinLimit = -20f; // Minimum Y angle
-    public float yMaxLimit = 80f; // Maximum Y angle
-    public float distanceMin = 12f; // Minimum distance
-    public float distanceMax = 15f; // Maximum distance
-    public CameraMode cameraMode = CameraMode.FreeFollow; // Camera mode
-    public Vector3 isometricOffset = new Vector3(20f, 20f, 1f); // Offset for the isometric camera
+    public Transform target; 
+    public float distance = 10f; 
+    public float xSpeed = 20.0f;
+    public float ySpeed = 20.0f; 
+    public float yMinLimit = -20f; 
+    public float yMaxLimit = 80f;
+    public float distanceMin = 12f; 
+    public float distanceMax = 15f; 
+    public CameraMode cameraMode = CameraMode.FreeFollow;
+    public Vector3 isometricOffset = new Vector3(20f, 20f, 1f); 
     public float isometricFOV = 30f;
     public float followFOV = 60f;
     private Camera mainCamera;
@@ -41,8 +41,11 @@ public class FollowCamera : MonoBehaviour
     }
 
     void LateUpdate()
+    {   if(GameManager.Instance.playingGame == false)
     {
-        if (Input.GetKeyDown(KeyCode.C)) // Toggle camera mode with the 'C' key
+        return;
+    }
+        if (Input.GetKeyDown(KeyCode.C))
         {
             cameraMode = cameraMode == CameraMode.FreeFollow ? CameraMode.Isometric : CameraMode.FreeFollow;
         }

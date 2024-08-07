@@ -11,7 +11,8 @@ public class PauseMenuUI : MonoBehaviour
     private Button _quitButton;
     
     void Start() 
-    {
+    {   
+        GameManager.Instance.playingGame = false;
         InitButtons();
     }
 
